@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
 
 
 public class Login extends JFrame {
@@ -38,6 +39,7 @@ public class Login extends JFrame {
 	private JPanel loginPnl;
 	private JButton btnLogin;
 	private JButton btnRegister;
+	private JCheckBox chckbxRememberMe;
 
 	/**
 	 * Launch the application.
@@ -164,6 +166,7 @@ public class Login extends JFrame {
 			loginPnl.add(getLblPassword());
 			loginPnl.add(getBtnLogin());
 			loginPnl.add(getBtnRegister());
+			loginPnl.add(getChckbxRememberMe());
 		}
 		return loginPnl;
 	}
@@ -183,5 +186,13 @@ public class Login extends JFrame {
 			btnRegister.setBounds(240, 82, 89, 23);
 		}
 		return btnRegister;
+	}
+	private JCheckBox getChckbxRememberMe() {
+		if (chckbxRememberMe == null) {
+			chckbxRememberMe = new JCheckBox("Remember Me");
+			chckbxRememberMe.setBackground(Color.CYAN);
+			chckbxRememberMe.setBounds(25, 68, 97, 23);
+		}
+		return chckbxRememberMe;
 	}
 }
