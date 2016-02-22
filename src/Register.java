@@ -12,6 +12,8 @@ import javax.swing.UIManager;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
@@ -33,7 +35,7 @@ public class Register extends JFrame {
 	private JTextField nameTxt;
 	private JPasswordField passwordField;
 	private JLabel label_1;
-	private JButton button;
+	private JButton registerBtn;
 	private JLabel label_2;
 	private JTextField emailTxt;
 	private JLabel label_3;
@@ -46,7 +48,7 @@ public class Register extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -57,7 +59,7 @@ public class Register extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
@@ -127,7 +129,7 @@ public class Register extends JFrame {
 			registerPnl.add(getNameTxt());
 			registerPnl.add(getPasswordField());
 			registerPnl.add(getLabel_1());
-			registerPnl.add(getButton());
+			registerPnl.add(getRegisterBtn());
 			registerPnl.add(getLabel_2());
 			registerPnl.add(getEmailTxt());
 			registerPnl.add(getLabel_3());
@@ -167,14 +169,21 @@ public class Register extends JFrame {
 		}
 		return label_1;
 	}
-	private JButton getButton() {
-		if (button == null) {
-			button = new JButton("Register");
-			button.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-			button.setBackground(Color.LIGHT_GRAY);
-			button.setBounds(226, 156, 89, 23);
+	private JButton getRegisterBtn() {
+		if (registerBtn == null) {
+			registerBtn = new JButton("Register");
+			registerBtn.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+			registerBtn.setBackground(Color.LIGHT_GRAY);
+			registerBtn.setBounds(226, 156, 89, 23);
+			
+			registerBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Login login = new Login();
+					login.setVisible(true);
+				}
+			});
 		}
-		return button;
+		return registerBtn;
 	}
 	private JLabel getLabel_2() {
 		if (label_2 == null) {

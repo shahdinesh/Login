@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +11,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
@@ -21,6 +24,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
+import java.awt.Toolkit;
 
 
 public class Login extends JFrame {
@@ -38,7 +42,7 @@ public class Login extends JFrame {
 	private JLayeredPane layeredPane;
 	private JPanel loginPnl;
 	private JButton btnLogin;
-	private JButton btnRegister;
+	private JButton btnSignup;
 	private JCheckBox chckbxRememberMe;
 
 	/**
@@ -61,6 +65,8 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\backup\\destop\\mjd\\CROPPED-DSC_0977.JPG"));
+		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 418, 206);
 		contentPane = new JPanel();
@@ -165,7 +171,7 @@ public class Login extends JFrame {
 			loginPnl.add(getPasswordFieldLogin());
 			loginPnl.add(getLblPassword());
 			loginPnl.add(getBtnLogin());
-			loginPnl.add(getBtnRegister());
+			loginPnl.add(getBtnSignup());
 			loginPnl.add(getChckbxRememberMe());
 		}
 		return loginPnl;
@@ -176,22 +182,50 @@ public class Login extends JFrame {
 			btnLogin.setBackground(Color.LIGHT_GRAY);
 			btnLogin.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 			btnLogin.setBounds(135, 82, 89, 23);
+			
+			btnLogin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					switchScreenToData();
+				}
+			});
 		}
 		return btnLogin;
 	}
-	private JButton getBtnRegister() {
-		if (btnRegister == null) {
-			btnRegister = new JButton("Sign Up");
-			btnRegister.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-			btnRegister.setBounds(240, 82, 89, 23);
+	public void switchScreenToData(){
+
+		passwordFieldLogin.setText("");
+		
+		DashBoard board = new DashBoard();
+		board.getLblUser().setText(usernameTxtLogin.getText().toUpperCase());
+		board.setVisible(true);
+		WindowsManager.ui.put("DashBoard", board);
+		
+		Login frame = (Login) WindowsManager.ui.get("Login");
+		frame.setVisible(false);
+	}
+	private JButton getBtnSignup() {
+		if (btnSignup == null) {
+			btnSignup = new JButton("Sign Up");
+			btnSignup.setBackground(Color.LIGHT_GRAY);
+			btnSignup.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+			btnSignup.setBounds(240, 82, 89, 23);
+			
+			btnSignup.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Register reg = new Register();
+					reg.setVisible(true);
+					
+				}
+			});
 		}
-		return btnRegister;
+		return btnSignup;
 	}
 	private JCheckBox getChckbxRememberMe() {
 		if (chckbxRememberMe == null) {
 			chckbxRememberMe = new JCheckBox("Remember Me");
+			chckbxRememberMe.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			chckbxRememberMe.setBackground(Color.CYAN);
-			chckbxRememberMe.setBounds(25, 68, 97, 23);
+			chckbxRememberMe.setBounds(20, 68, 109, 23);
 		}
 		return chckbxRememberMe;
 	}
