@@ -24,7 +24,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
+
+import dao.UserDao;
+import model.User;
+
 import java.awt.Toolkit;
+import java.sql.SQLException;
 
 
 public class Login extends JFrame {
@@ -44,6 +49,7 @@ public class Login extends JFrame {
 	private JButton btnLogin;
 	private JButton btnSignup;
 	private JCheckBox chckbxRememberMe;
+	private JLabel statuslbl;
 
 	/**
 	 * Launch the application.
@@ -68,7 +74,7 @@ public class Login extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\backup\\destop\\mjd\\CROPPED-DSC_0977.JPG"));
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 418, 206);
+		setBounds(100, 100, 418, 268);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -164,7 +170,7 @@ public class Login extends JFrame {
 			loginPnl = new JPanel();
 			loginPnl.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Login Panel", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(139, 0, 0)));
 			loginPnl.setBackground(Color.CYAN);
-			loginPnl.setBounds(10, 11, 350, 115);
+			loginPnl.setBounds(10, 11, 350, 177);
 			loginPnl.setLayout(null);
 			loginPnl.add(getUsernameTxtLogin());
 			loginPnl.add(getLblUsername());
@@ -173,6 +179,7 @@ public class Login extends JFrame {
 			loginPnl.add(getBtnLogin());
 			loginPnl.add(getBtnSignup());
 			loginPnl.add(getChckbxRememberMe());
+			loginPnl.add(getStatuslbl());
 		}
 		return loginPnl;
 	}
@@ -181,11 +188,27 @@ public class Login extends JFrame {
 			btnLogin = new JButton("Sign In");
 			btnLogin.setBackground(Color.LIGHT_GRAY);
 			btnLogin.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-			btnLogin.setBounds(135, 82, 89, 23);
+			btnLogin.setBounds(137, 143, 89, 23);
 			
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					switchScreenToData();
+					User user = new User();
+					String username = usernameTxtLogin.getText();
+					String password = new String(passwordFieldLogin.getPassword());
+					user.setPassword(password);
+					user.setUsername(username);
+					UserDao uDao = new UserDao();
+					try {
+						if(uDao.validUser(user)){
+							switchScreenToData();
+						}else if(username.isEmpty() || password.isEmpty()){
+							statuslbl.setText("Username or passeord is empty");
+						}else{
+							statuslbl.setText("Username or passeord is wrong");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					} 
 				}
 			});
 		}
@@ -198,17 +221,19 @@ public class Login extends JFrame {
 		DashBoard board = new DashBoard();
 		board.getLblUser().setText(usernameTxtLogin.getText().toUpperCase());
 		board.setVisible(true);
-		WindowsManager.ui.put("DashBoard", board);
+		/*WindowsManager.ui.put("DashBoard", board);
 		
 		Login frame = (Login) WindowsManager.ui.get("Login");
-		frame.setVisible(false);
+		frame.setVisible(false);*/
+		Login frame = new Login();
+		frame.dispose();
 	}
 	private JButton getBtnSignup() {
 		if (btnSignup == null) {
 			btnSignup = new JButton("Sign Up");
 			btnSignup.setBackground(Color.LIGHT_GRAY);
 			btnSignup.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-			btnSignup.setBounds(240, 82, 89, 23);
+			btnSignup.setBounds(236, 143, 89, 23);
 			
 			btnSignup.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -225,8 +250,16 @@ public class Login extends JFrame {
 			chckbxRememberMe = new JCheckBox("Remember Me");
 			chckbxRememberMe.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			chckbxRememberMe.setBackground(Color.CYAN);
-			chckbxRememberMe.setBounds(20, 68, 109, 23);
+			chckbxRememberMe.setBounds(25, 119, 109, 23);
 		}
 		return chckbxRememberMe;
+	}
+	private JLabel getStatuslbl() {
+		if (statuslbl == null) {
+			statuslbl = new JLabel("");
+			statuslbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			statuslbl.setBounds(45, 83, 220, 29);
+		}
+		return statuslbl;
 	}
 }
