@@ -1,19 +1,22 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.JButton;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import model.Register;
+import dao.DashboardDao;
 
 
 public class DashBoard extends JFrame {
@@ -28,7 +31,8 @@ public class DashBoard extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -39,12 +43,14 @@ public class DashBoard extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public DashBoard() {
+	public DashBoard() throws ClassNotFoundException, SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -54,6 +60,7 @@ public class DashBoard extends JFrame {
 		contentPane.add(getContentPnl());
 		contentPane.add(getBtnLogOut());
 		contentPane.add(getLblUser());
+		displayUser();
 	}
 
 	private JPanel getContentPnl() {
@@ -102,6 +109,16 @@ public class DashBoard extends JFrame {
 			));
 		}
 		return table;
+	}
+	private void displayUser() throws ClassNotFoundException, SQLException{
+		DefaultTableModel model = new DefaultTableModel();
+		model.setRowCount(0);
+		DashboardDao regDao = new DashboardDao();
+		List<Register> userList = regDao.allUser();
+		
+		for(Register regs : userList){
+			model.addRow(new Object[]{regs.getId(),regs.getName(),regs.getUsername(),regs.getEmail(),regs.getGender()});
+		}
 	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {

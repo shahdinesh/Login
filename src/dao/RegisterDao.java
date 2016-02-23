@@ -1,42 +1,24 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import model.Register;
 
 public class RegisterDao {
-	private Connection conn = null;
-	
-	private List<Register> getData() throws SQLException{
-		List<Register> reg = new ArrayList<Register>();
-		try(Statement stm = conn.createStatement()){
-			ResultSet rs = stm.executeQuery("select * from student");
-			while(rs.next()){
-				Register regs = copyResult(rs);
-				reg.add(regs);
-				
-				System.out.println(regs);
-			}
-		}catch(Exception e){
-			System.out.println(e);
-		}
-		return reg;
+	private Connection con = null;
+	public RegisterDao() throws ClassNotFoundException, SQLException{
+		con = MysqlConn.getConnection();
 	}
-	
-	private Register copyResult(ResultSet rs) throws SQLException{
-		Register reg = new Register();
-		reg.setId(rs.getInt("id"));
-		reg.setEmail(rs.getString("email"));
-		reg.setGender(rs.getString("gender"));
-		reg.setName(rs.getString("name"));
-		reg.setUsername(rs.getString("username"));
-		reg.setPassword(rs.getString("password"));
-		
-		return reg;
+	public void saveUser(Register reg) throws SQLException{
+		PreparedStatement stm = con.prepareStatement("insert into user(id,name,username,password,gender,email) values(?,?,?,?,?,?)");
+		stm.setInt(1, reg.getId());
+		stm.setString(2, reg.getName());
+		stm.setString(3, reg.getUsername());
+		stm.setString(4, reg.getPassword());
+		stm.setString(5, reg.getGender());
+		stm.setString(6, reg.getEmail());
+		stm.executeUpdate();
 	}
 }

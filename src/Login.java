@@ -59,6 +59,7 @@ public class Login extends JFrame {
 			public void run() {
 				try {
 					Login frame = new Login();
+					WindowsManager.ui.put("Login", frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -71,7 +72,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\backup\\destop\\mjd\\CROPPED-DSC_0977.JPG"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\java-ws\\colz\\resource\\CROPPED-DSC_0977.JPG"));
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 418, 268);
@@ -214,19 +215,17 @@ public class Login extends JFrame {
 		}
 		return btnLogin;
 	}
-	public void switchScreenToData(){
+	public void switchScreenToData() throws ClassNotFoundException, SQLException{
 
 		passwordFieldLogin.setText("");
 		
 		DashBoard board = new DashBoard();
 		board.getLblUser().setText(usernameTxtLogin.getText().toUpperCase());
 		board.setVisible(true);
-		/*WindowsManager.ui.put("DashBoard", board);
+		WindowsManager.ui.put("DashBoard", board);
 		
 		Login frame = (Login) WindowsManager.ui.get("Login");
-		frame.setVisible(false);*/
-		Login frame = new Login();
-		frame.dispose();
+		frame.setVisible(false);
 	}
 	private JButton getBtnSignup() {
 		if (btnSignup == null) {
@@ -239,7 +238,9 @@ public class Login extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					Register reg = new Register();
 					reg.setVisible(true);
-					
+					WindowsManager.ui.put("Register", reg);
+					Login l = (Login) WindowsManager.ui.get("Login");
+					l.setVisible(false);
 				}
 			});
 		}

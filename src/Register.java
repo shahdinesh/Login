@@ -14,12 +14,15 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
+
+import dao.RegisterDao;
 
 
 public class Register extends JFrame {
@@ -48,7 +51,7 @@ public class Register extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -59,7 +62,7 @@ public class Register extends JFrame {
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the frame.
@@ -178,13 +181,37 @@ public class Register extends JFrame {
 			
 			registerBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Login login = new Login();
-					login.setVisible(true);
+					try {
+						model.Register reg = getData();
+						RegisterDao rDao = new RegisterDao();
+						rDao.saveUser(reg);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					Register re = (Register) WindowsManager.ui.get("Register");
+					re.setVisible(false);
+					Login l = (Login) WindowsManager.ui.get("Login");
+					l.setVisible(true);
 				}
 			});
-		}
+		}	
 		return registerBtn;
 	}
+	
+	private model.Register getData(){
+		model.Register regs = new model.Register();
+		regs.setEmail(emailTxt.getText());
+		regs.setName(nameTxt.getText());
+		regs.setUsername(usernameTxt.getText());
+		regs.setPassword(new String(passwordField.getPassword()));
+		if(rdbtnMale.isSelected()){
+			regs.setGender("Male");
+		}else if(rdbtnFemale.isSelected()){
+			regs.setGender("Female");
+		}
+		return regs;
+	}
+	
 	private JLabel getLabel_2() {
 		if (label_2 == null) {
 			label_2 = new JLabel("Email");
